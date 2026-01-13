@@ -11,6 +11,23 @@
 | **Repo** | https://github.com/SebastienFeser/AIEngine2D.git |
 | **Branch** | master |
 | **Platform** | Windows (win32) |
+| **Namespace** | `SebF2DEngine` |
+| **vcpkg** | `C:\vcpkg` |
+| **CMake** | `C:\Program Files\CMake\bin` |
+
+## 📦 DEPENDENCIES (via vcpkg)
+
+| Package | Version | Usage |
+|---------|---------|-------|
+| sdl2 | 2.32.10 | Window, input, audio backend |
+| imgui | 1.91.9 | Editor UI (with docking + OpenGL3) |
+| OpenGL | System | Rendering |
+
+**Build command:**
+```bash
+cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake --build . --config Debug
+```
 
 ## ⏳ TEMPORARY TODOs (Delete once done)
 

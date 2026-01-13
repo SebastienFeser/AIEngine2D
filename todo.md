@@ -26,7 +26,7 @@ Each phase includes:
   - /src/{core,renderer,physics,audio,input,assets,animation,editor,math}
   - /assets/{sprites,audio,levels}
 
-- [ ] **CMakeLists.txt (top-level)**
+- [x] **CMakeLists.txt (top-level)**
   - Detect compiler (GCC, Clang, MSVC)
   - Find SDL2, OpenGL, ImGui packages
   - Set C++17 standard
@@ -34,14 +34,14 @@ Each phase includes:
   - Configure Debug/Release builds
   - Add subdirectories
 
-- [ ] **CMakeLists.txt (src/)**
+- [x] **CMakeLists.txt (src/)**
   - Create library targets for each module
-  - Link SDL2, OpenGL
+  - Link SDL2, OpenGL, ImGui via vcpkg
 
-- [ ] **CMakeLists.txt (test/)**
+- [x] **CMakeLists.txt (test/)**
   - Google Test setup (optional)
 
-- [ ] **CMakeLists.txt (examples/)**
+- [x] **CMakeLists.txt (examples/)**
   - Build example projects
 
 - [ ] **IDE configuration**
