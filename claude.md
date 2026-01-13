@@ -12,6 +12,10 @@
 | **Branch** | master |
 | **Platform** | Windows (win32) |
 
+## ⏳ TODO TEMPORAIRES (À supprimer une fois fait)
+
+- [ ] **Mettre à jour README.md** une fois le projet installé et fonctionnel (vérifier instructions d'install, quick start, etc.)
+
 ---
 
 ## 🔄 CLAUDE.MD MAINTENANCE (CRITICAL)
