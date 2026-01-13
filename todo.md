@@ -16,12 +16,12 @@ Each phase includes:
 
 ### Subtasks
 
-- [ ] **Create Git repository**
+- [x] **Create Git repository**
   - Initialize git repo
   - Create `.gitignore` (build/, bin/, .vscode/, .idea/, *.o, *.a, .DS_Store)
   - First commit: "init: project setup"
 
-- [ ] **Create folder structure**
+- [x] **Create folder structure**
   - /src, /include, /docs, /examples, /assets, /tests
   - /src/{core,renderer,physics,audio,input,assets,animation,editor,math}
   - /assets/{sprites,audio,levels}

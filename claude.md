@@ -12,24 +12,26 @@
 | **Branch** | master |
 | **Platform** | Windows (win32) |
 
-## ⏳ TODO TEMPORAIRES (À supprimer une fois fait)
+## ⏳ TEMPORARY TODOs (Delete once done)
 
-- [ ] **Mettre à jour README.md** une fois le projet installé et fonctionnel (vérifier instructions d'install, quick start, etc.)
+- [ ] **Update README.md** once project is installed and functional (verify install instructions, quick start, etc.)
 
 ---
 
 ## 🔄 CLAUDE.MD MAINTENANCE (CRITICAL)
 
-**À chaque session, Claude DOIT:**
-1. Identifier les infos importantes découvertes (décisions, configs, problèmes résolus)
-2. Mettre à jour ce fichier avec ces infos
-3. **Garder le fichier OPTIMISÉ** - pas de redondance, pas de bruit
+**Each session, Claude MUST:**
+1. Identify important info discovered (decisions, configs, solved issues)
+2. Update this file with that info
+3. **Keep file OPTIMIZED** - no redundancy, no noise
+4. **Delete `tmpclaude-*` files** at root if they exist (Claude Code temp files)
 
-**Règles:**
-- Ajouter uniquement les infos **actionnables et réutilisables**
-- Supprimer les infos obsolètes
-- Préférer les tableaux et listes aux paragraphes
-- Max ~600 lignes pour ce fichier
+**Rules:**
+- Add only **actionable and reusable** info
+- Remove obsolete info
+- Prefer tables and lists over paragraphs
+- Max ~600 lines for this file
+- **ALL files must be in English** (code, comments, docs, commits)
 
 ---
 
