@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a 2D Game Engine in 2026: A Journey into AI-Augmented Development | AIEngine2D</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-code: #0f0f1a;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0a0;
+            --accent: #e94560;
+            --accent-secondary: #0f3460;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --info: #60a5fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--accent-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin: 3rem 0 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--text-primary);
+        }
+
+        .lead {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+            margin: 2rem 0;
+        }
+
+        pre {
+            background: var(--bg-code);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--accent);
+        }
+
+        code {
+            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+            font-size: 0.9rem;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .callout {
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .callout-info {
+            background: rgba(96, 165, 250, 0.1);
+            border-left: 3px solid var(--info);
+        }
+
+        .callout-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 3px solid var(--warning);
+        }
+
+        .callout-success {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 3px solid var(--success);
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .diagram-placeholder {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--accent-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .diagram-placeholder h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .diagram-placeholder p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .diagram-placeholder ul {
+            text-align: left;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--accent-secondary);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .quote {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            position: relative;
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: var(--accent);
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            opacity: 0.3;
+        }
+
+        .quote-author {
+            text-align: right;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            font-style: normal;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--accent-secondary);
+            color: var(--text-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--accent-secondary);
+        }
+
+        .nav-link {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .toc {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .toc-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .toc-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc-list li {
+            margin: 0.5rem 0;
+        }
+
+        .toc-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent);
+        }
+
+        .author-box {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .author-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .author-info p {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="phase-badge">Introduction</span>
+            <h1>Building a 2D Game Engine in 2026</h1>
+            <p class="subtitle">A Gameplay Programmer's Journey into AI-Augmented Development</p>
+            <p class="meta">How I'm using Claude AI to build a SNES-style engine from scratch</p>
+            <p class="meta">Published: January 2026 | Reading time: ~18 minutes</p>
+        </header>
+
+        <article>
+            <p class="lead">
+                In January 2026, I made a decision that might seem counterintuitive: instead of using Unity, Godot, or Unreal &mdash; engines built by hundreds of engineers over decades &mdash; I started building my own 2D game engine from scratch. But here's the twist: I'm not doing it alone. I'm building it with Claude, Anthropic's AI assistant.
+            </p>
+
+            <nav class="toc">
+                <div class="toc-title">Table of Contents</div>
+                <ol class="toc-list">
+                    <li><a href="#career-pivot">Part 1: The Career Pivot Nobody Warned Me About</a></li>
+                    <li><a href="#why-scratch">Part 2: Why Build an Engine from Scratch?</a></li>
+                    <li><a href="#architecture">Part 3: The Technical Architecture</a></li>
+                    <li><a href="#ai-workflow">Part 4: The AI-Augmented Workflow</a></li>
+                    <li><a href="#road-ahead">Part 5: The Road Ahead</a></li>
+                    <li><a href="#conclusion">Conclusion: The New Developer Identity</a></li>
+                </ol>
+            </nav>
+
+            <!-- ======================= PART 1 ======================= -->
+            <h2 id="career-pivot">Part 1: The Career Pivot Nobody Warned Me About</h2>
+
+            <h3>From Gameplay Programmer to... What Exactly?</h3>
+
+            <p>
+                I hold a Bachelor of Science in Games Programming. I've worked on personal projects, collaborated with an association creating ecological games, and spent years thinking about player experiences, game loops, and systems design.
+            </p>
+
+            <p>
+                For most of my career, the path seemed clear: master C++, understand engine internals, ship games. The tools were stable. The skills were transferable. The industry, while competitive, had a certain predictability.
+            </p>
+
+            <p class="highlight">Then came 2025.</p>
+
+            <p>
+                The rise of generative AI didn't just add a new tool to the developer's toolkit &mdash; it fundamentally questioned what a "developer" even does. When an AI can generate hundreds of lines of functional code in seconds, what's left for the human?
+            </p>
+
+            <p>
+                I watched colleagues debate this endlessly. Some dismissed AI as a toy. Others panicked about obsolescence. I decided to find out for myself.
+            </p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #1: Career Evolution Timeline</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Horizontal timeline</p>
+                <ul>
+                    <li>2020: "Bachelor in Games Programming"</li>
+                    <li>2021-2024: "Gameplay Programmer | Personal Projects + Ecological Games"</li>
+                    <li>2025: "Developer at University of Geneva | First AI projects"</li>
+                    <li>2026: "Career pivot | AI-Augmented Development begins"</li>
+                </ul>
+            </div>
+
+            <h3>The Geneva Catalyst</h3>
+
+            <p>
+                My current role as a developer at the University of Geneva changed everything. Working on projects involving generative AI gave me hands-on experience with what these systems can and cannot do.
+            </p>
+
+            <p>I realized something crucial:</p>
+
+            <div class="quote">
+                AI doesn't replace developers &mdash; it changes what developers do. The future isn't "AI vs. Humans." It's humans who know how to leverage AI versus those who don't.
+            </div>
+
+            <p>
+                So I coined a term for what I want to become: <strong>Game Engineer | AI-Augmented Development</strong>.
+            </p>
+
+            <p>
+                It's not a job title that exists yet. It's an identity I'm forging &mdash; and this engine is my proving ground.
+            </p>
+
+            <!-- ======================= PART 2 ======================= -->
+            <h2 id="why-scratch">Part 2: Why Build an Engine from Scratch?</h2>
+
+            <h3>The Case Against Using Existing Engines</h3>
+
+            <p>
+                Unity, Godot, Unreal &mdash; they're incredible pieces of software. Millions of developers use them to ship real games. So why not just use one?
+            </p>
+
+            <h3>1. Understanding vs. Using</h3>
+
+            <p>
+                There's a difference between driving a car and understanding how an engine works. I've "used" game engines for years. But I've never truly understood the layers beneath: how an ECS really works, how sprite batching optimizes draw calls, how audio mixing happens at the sample level.
+            </p>
+
+            <p class="highlight">This project is about depth, not shortcuts.</p>
+
+            <h3>2. The Unfinished Engine Graveyard</h3>
+
+            <p>
+                I'll be honest: I've started building engines before. Every time, I abandoned them for the next shiny project.
+            </p>
+
+            <p>
+                This time is different. With AI assistance, the tedious parts &mdash; boilerplate code, repetitive implementations, documentation &mdash; become manageable. The cognitive load drops. The momentum stays.
+            </p>
+
+            <h3>3. Control and Constraints</h3>
+
+            <p>
+                Commercial engines are designed for everyone, which means they're optimized for no one in particular. I want specific things:
+            </p>
+
+            <ul>
+                <li>Pixel-perfect rendering at SNES resolution (256x224)</li>
+                <li>Custom 2D physics (no Box2D bloat)</li>
+                <li>Custom audio system (no FMOD licensing)</li>
+                <li>An architecture I understand completely</li>
+            </ul>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #2: Build vs. Buy Decision Matrix</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Comparison table</p>
+                <table>
+                    <tr><th>Aspect</th><th>Commercial Engine</th><th>Custom Engine</th></tr>
+                    <tr><td>Time to first game</td><td>Fast</td><td>Slow</td></tr>
+                    <tr><td>Understanding depth</td><td>Surface</td><td>Complete</td></tr>
+                    <tr><td>Flexibility</td><td>Limited by design</td><td>Total control</td></tr>
+                    <tr><td>Learning value</td><td>Low</td><td>Maximum</td></tr>
+                    <tr><td>Portfolio impact</td><td>Common</td><td>Distinctive</td></tr>
+                </table>
+            </div>
+
+            <h3>Why SNES Specifically?</h3>
+
+            <p>
+                The Super Nintendo wasn't just a console &mdash; it was a masterclass in working within constraints.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">256x224</div>
+                    <div class="stat-label">Resolution</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">256</div>
+                    <div class="stat-label">Colors on screen</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">128</div>
+                    <div class="stat-label">Max sprites</div>
+                </div>
+            </div>
+
+            <p>
+                These limitations forced incredible creativity. Games like <em>Chrono Trigger</em>, <em>Super Metroid</em>, and <em>A Link to the Past</em> achieved excellence not despite these constraints, but because of them.
+            </p>
+
+            <p>
+                I'm not building a SNES emulator. I'm building a modern engine that embraces similar constraints &mdash; because constraints breed creativity, and pixel art at low resolution has a timeless aesthetic that high-fidelity 3D simply can't replicate.
+            </p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #3: SNES Technical Constraints Infographic</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Visual infographic</p>
+                <ul>
+                    <li>Resolution: 256x224 (with pixel grid visualization)</li>
+                    <li>Colors: 256 from 32,768 palette (color swatches)</li>
+                    <li>Sprites: 128 max, 32 per scanline</li>
+                    <li>Layers: Up to 8 background layers (layered illustration)</li>
+                </ul>
+                <p><em>Style: Retro-inspired, pixel art aesthetic</em></p>
+            </div>
+
+            <!-- ======================= PART 3 ======================= -->
+            <h2 id="architecture">Part 3: The Technical Architecture</h2>
+
+            <h3>Entity-Component-System: Data-Oriented Design</h3>
+
+            <p>
+                The heart of the engine is an ECS (Entity-Component-System) architecture &mdash; but not the kind you might find in Unity. This is a <strong>dense, data-oriented ECS</strong> optimized for cache efficiency.
+            </p>
+
+            <h3>The Problem with Traditional OOP</h3>
+
+            <p>Traditional object-oriented game code looks like this:</p>
+
+            <pre><code>class Player : public GameObject {
+    Transform transform;
+    Sprite sprite;
+    Rigidbody rigidbody;
+    // ... methods that operate on this data
+};</code></pre>
+
+            <p>
+                This seems clean, but it's terrible for performance. When you iterate over 10,000 entities, you're jumping through memory like a pinball. Cache misses destroy your frame rate.
+            </p>
+
+            <h3>The ECS Solution</h3>
+
+            <p>In ECS, we separate identity (Entity), data (Component), and logic (System):</p>
+
+            <pre><code>// Entity = just an ID
+struct Entity {
+    uint32_t index : 20;      // ~1 million entities
+    uint32_t generation : 12; // Reuse detection
+};
+
+// Components = pure data, stored contiguously
+struct Position { float x, y; };
+struct Velocity { float dx, dy; };
+struct Sprite { uint32_t textureId; /* ... */ };
+
+// Systems = logic that operates on component arrays
+class MovementSystem {
+    void update(float dt, ComponentArray&lt;Position&gt;&amp; pos,
+                         ComponentArray&lt;Velocity&gt;&amp; vel);
+};</code></pre>
+
+            <p>
+                The key insight: <strong>Structure of Arrays (SoA) instead of Array of Structures (AoS)</strong>.
+            </p>
+
+            <pre><code>// AoS (bad for cache)
+[Entity0: pos, vel, sprite] [Entity1: pos, vel, sprite] ...
+
+// SoA (good for cache)
+Positions:  [pos0] [pos1] [pos2] [pos3] ...
+Velocities: [vel0] [vel1] [vel2] [vel3] ...
+Sprites:    [spr0] [spr1] [spr2] [spr3] ...</code></pre>
+
+            <p>
+                When the MovementSystem runs, it reads positions and velocities sequentially &mdash; perfect cache utilization, SIMD-friendly, and trivially parallelizable.
+            </p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #4: ECS Architecture Diagram</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Multi-layer architecture diagram</p>
+                <ul>
+                    <li>Top layer: "Systems" (MovementSystem, RenderSystem, PhysicsSystem)</li>
+                    <li>Middle layer: "Component Arrays" (Position[], Velocity[], Sprite[])</li>
+                    <li>Bottom layer: "Entity Registry" (ID mapping, generation tracking)</li>
+                    <li>Side comparison: AoS vs SoA memory layout</li>
+                </ul>
+                <p><em>Style: Technical but clean, color-coded by layer</em></p>
+            </div>
+
+            <h3>The Rendering Pipeline</h3>
+
+            <p>
+                The renderer uses <strong>OpenGL 3.3 Core Profile</strong> &mdash; modern enough for shaders, old enough for near-universal compatibility (including future WebGL/Emscripten builds).
+            </p>
+
+            <p><strong>Pipeline stages:</strong></p>
+
+            <ol>
+                <li><strong>Clear</strong> framebuffer</li>
+                <li><strong>Update</strong> camera matrices</li>
+                <li><strong>Sort</strong> sprites by layer and Z-order</li>
+                <li><strong>Batch</strong> sprites by texture (up to 10,000 per batch)</li>
+                <li><strong>Render</strong> batches using instancing</li>
+                <li><strong>Post-process</strong> (pixelization shader for that authentic look)</li>
+                <li><strong>Composite</strong> ImGui editor overlay</li>
+                <li><strong>Swap</strong> buffers</li>
+            </ol>
+
+            <p>
+                The pixelization shader is key to the aesthetic. The game renders internally at SNES resolution, then upscales with nearest-neighbor filtering to the window size. No blurry bilinear filtering &mdash; every pixel is crisp.
+            </p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #5: Rendering Pipeline Flowchart</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Vertical flowchart</p>
+                <ul>
+                    <li>8 steps with icons (framebuffer, camera, sorting, batching...)</li>
+                    <li>Show internal resolution (256x224) vs output resolution (window)</li>
+                    <li>Highlight pixelization shader step</li>
+                </ul>
+                <p><em>Style: Pipeline flow with icons</em></p>
+            </div>
+
+            <h3>Zero External Dependencies Philosophy</h3>
+
+            <p>
+                This might be the most controversial decision: <strong>no Box2D, no FMOD, no external physics or audio libraries</strong>.
+            </p>
+
+            <p>Why? Three reasons:</p>
+
+            <ol>
+                <li><strong>Learning</strong> &mdash; I want to understand how physics solvers and audio mixers actually work</li>
+                <li><strong>Control</strong> &mdash; No licensing issues, no breaking updates, no bloat</li>
+                <li><strong>Constraints</strong> &mdash; The SNES didn't have Box2D. Working within limitations is the point</li>
+            </ol>
+
+            <div class="callout callout-info">
+                <div class="callout-title">Custom Systems Overview</div>
+                <p><strong>Physics:</strong> AABB and circle collision, impulse-based solver, spatial grid for broad-phase, fixed timestep.</p>
+                <p><strong>Audio:</strong> WAV file parser (16-bit PCM), multi-channel mixer, per-channel volume/panning/pitch, lock-free command queue.</p>
+            </div>
+
+            <p>
+                Are these systems as feature-rich as Box2D or FMOD? Absolutely not. But they're mine, I understand every line, and they do exactly what I need.
+            </p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #6: System Architecture Overview</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Layered stack diagram</p>
+                <ul>
+                    <li>Platform Layer: SDL2, OpenGL, File I/O</li>
+                    <li>Renderer: Shaders, Batching, Pixelization</li>
+                    <li>Subsystems: Physics 2D, Audio, Input, Assets, Timing</li>
+                    <li>ECS Core: Entities, Components, Systems, Events</li>
+                    <li>Editor: ImGui, Level Editor, Property Inspector</li>
+                    <li>Gameplay: Entity behaviors, game logic</li>
+                </ul>
+                <p><em>Style: Clean layers with clear boundaries</em></p>
+            </div>
+
+            <!-- ======================= PART 4 ======================= -->
+            <h2 id="ai-workflow">Part 4: The AI-Augmented Workflow</h2>
+
+            <h3>Claude as Co-Pilot</h3>
+
+            <p>
+                I've been using Claude (specifically Claude Code, Anthropic's CLI tool) for about six weeks now. Here's my honest assessment.
+            </p>
+
+            <h3>The "Wow" Moment</h3>
+
+            <p>
+                The first time Claude generated 500 lines of functional OpenGL boilerplate &mdash; shader loading, vertex buffer setup, error handling &mdash; in under a minute, I understood why people are excited about AI coding assistants.
+            </p>
+
+            <p class="highlight">
+                Tasks that would take me an afternoon of Stack Overflow and documentation diving now take minutes. The productivity multiplier is real.
+            </p>
+
+            <h3>The Reality Check</h3>
+
+            <p>But here's what the hype doesn't tell you: <strong>AI doesn't understand your project</strong>.</p>
+
+            <p>
+                Claude can generate code. It can follow patterns. It can even make reasonable architectural decisions when prompted correctly. But it doesn't hold the mental model of your entire codebase. It doesn't understand why you made that weird design decision three weeks ago. It doesn't catch the subtle bug that emerges from the interaction of two systems it generated separately.
+            </p>
+
+            <div class="callout callout-warning">
+                <div class="callout-title">You still need to be an engineer</div>
+                <p>The AI is a power tool, not a replacement for understanding. When something breaks &mdash; and it will break &mdash; you need to debug it. When the generated code doesn't fit your architecture, you need to refactor it. When the AI suggests an over-engineered solution, you need to simplify it.</p>
+            </div>
+
+            <p>
+                The skill isn't "prompting" &mdash; it's knowing what to ask for, recognizing good code from bad, and maintaining coherence across a growing codebase.
+            </p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #7: Human-AI Collaboration Workflow</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Circular workflow diagram</p>
+                <ul>
+                    <li>1. Human: "Define architecture and constraints"</li>
+                    <li>2. Human: "Write focused prompt with context"</li>
+                    <li>3. AI: "Generate code implementation"</li>
+                    <li>4. Human: "Review, compile, test"</li>
+                    <li>5. Human: "Debug and integrate"</li>
+                    <li>6. Human: "Update documentation" &rarr; Back to step 2</li>
+                </ul>
+                <p><em>Center: "The human maintains the mental model"</em></p>
+            </div>
+
+            <h3>The Multi-Agent Approach</h3>
+
+            <p>
+                To manage complexity, I've structured the project around <strong>8 specialized agents</strong> &mdash; conceptual divisions that help me write focused prompts:
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Agent</th>
+                        <th>Responsibility</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Agent-CORE</strong></td><td>ECS manager, entity lifecycle, events, transforms</td></tr>
+                    <tr><td><strong>Agent-RENDERER</strong></td><td>OpenGL pipeline, sprite batching, shaders</td></tr>
+                    <tr><td><strong>Agent-PHYSICS</strong></td><td>Collision detection, rigidbodies, constraints</td></tr>
+                    <tr><td><strong>Agent-AUDIO</strong></td><td>WAV loading, mixer, effects</td></tr>
+                    <tr><td><strong>Agent-INPUT</strong></td><td>SDL2 input, key mapping, event buffering</td></tr>
+                    <tr><td><strong>Agent-ASSETS</strong></td><td>Image loading, texture pooling, sprite sheets</td></tr>
+                    <tr><td><strong>Agent-EDITOR</strong></td><td>ImGui UI, level editor, property inspector</td></tr>
+                    <tr><td><strong>Agent-DOCS</strong></td><td>Blog posts, API documentation, tutorials</td></tr>
+                </tbody>
+            </table>
+
+            <p>
+                Each agent has its own <span class="inline-code">claude.md</span> file with specialized instructions. When I need physics code, I load the physics context. When I need renderer code, I load the renderer context.
+            </p>
+
+            <p>
+                This isn't about multiple AIs running simultaneously &mdash; it's about <strong>scoped context</strong> that keeps prompts focused and outputs coherent.
+            </p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #8: Multi-Agent Architecture</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Hub-and-spoke diagram</p>
+                <ul>
+                    <li>Center: "Main claude.md (Project Context)"</li>
+                    <li>8 spokes radiating to agents with icons</li>
+                    <li>Color coding by domain (blue=core, green=rendering, etc.)</li>
+                </ul>
+                <p><em>Style: Clean organizational chart</em></p>
+            </div>
+
+            <h3>Token Economics</h3>
+
+            <p>
+                AI coding isn't free &mdash; both in API costs and context limitations. I operate under a strict rule: <strong>maximum 10,000 tokens per request</strong>.
+            </p>
+
+            <p>This forces discipline:</p>
+
+            <ul>
+                <li>One system module or 3-5 small files per request</li>
+                <li>Clear, scoped prompts with explicit constraints</li>
+                <li>Incremental development rather than "generate everything at once"</li>
+            </ul>
+
+            <p>
+                Paradoxically, this limitation improves code quality. Smaller, focused generations are easier to review, debug, and integrate than massive code dumps.
+            </p>
+
+            <!-- ======================= PART 5 ======================= -->
+            <h2 id="road-ahead">Part 5: The Road Ahead</h2>
+
+            <h3>Current Status</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Milestone</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Project structure and build system (CMake + vcpkg)</td><td style="color: var(--success);">Complete</td></tr>
+                    <tr><td>SDL2 window with OpenGL context</td><td style="color: var(--success);">Complete</td></tr>
+                    <tr><td>Basic game loop skeleton</td><td style="color: var(--success);">Complete</td></tr>
+                    <tr><td>ECS core implementation</td><td style="color: var(--warning);">In Progress</td></tr>
+                    <tr><td>Renderer, Physics, Audio, Editor...</td><td style="color: var(--text-secondary);">Planned</td></tr>
+                </tbody>
+            </table>
+
+            <p>The roadmap spans <strong>20 phases</strong>, from basic rendering to a full platformer demo with in-engine level editing.</p>
+
+            <div class="diagram-placeholder">
+                <h4>VISUAL #9: Project Roadmap</h4>
+                <p><strong>Tool:</strong> draw.io | <strong>Type:</strong> Timeline / milestone chart</p>
+                <ul>
+                    <li>Phase 0-5: Foundation (SDL2, OpenGL, ECS Core)</li>
+                    <li>Phase 6-10: Systems (Physics, Audio, Input, Assets)</li>
+                    <li>Phase 11-15: Editor &amp; Polish (ImGui, Level Editor, Tools)</li>
+                    <li>Phase 16-20: Demo Games (Pong, Platformer, Shooter)</li>
+                </ul>
+                <p><em>Mark current position with "YOU ARE HERE"</em></p>
+            </div>
+
+            <h3>The Endgame</h3>
+
+            <p>What's this all for?</p>
+
+            <ul>
+                <li><strong>Short term:</strong> A portfolio piece that demonstrates both technical depth and adaptability to new development paradigms.</li>
+                <li><strong>Medium term:</strong> A functional engine I truly understand, capable of producing small but polished games.</li>
+                <li><strong>Long term:</strong> Perhaps a complete game &mdash; with AI-generated sprites, animations, and audio. A fully AI-augmented production pipeline from engine to assets to final product.</li>
+            </ul>
+
+            <!-- ======================= CONCLUSION ======================= -->
+            <h2 id="conclusion">Conclusion: The New Developer Identity</h2>
+
+            <p>
+                A year ago, I was a Gameplay Programmer &mdash; someone who implemented game mechanics within existing frameworks.
+            </p>
+
+            <p>Today, I'm becoming something else:</p>
+
+            <ul>
+                <li>A <strong>Game Engineer</strong> who architects systems</li>
+                <li>A <strong>curator of AI output</strong> who knows what to keep and what to discard</li>
+                <li>An <strong>experimentalist</strong> pushing the boundaries of human-AI collaboration in creative software development</li>
+            </ul>
+
+            <p>The title doesn't exist on job boards yet. But I believe it will.</p>
+
+            <div class="callout callout-success">
+                <div class="callout-title">The Bottom Line</div>
+                <p>If you're a developer wondering whether AI is coming for your job, here's my answer: <strong>it's coming for part of your job</strong> &mdash; the repetitive, boilerplate, lookup-in-documentation part.</p>
+                <p>What remains is the hard part: understanding systems deeply, making architectural decisions, debugging complex interactions, and maintaining a coherent vision across a growing codebase.</p>
+                <p>Those skills aren't going away. If anything, they're becoming more valuable.</p>
+            </div>
+
+            <p class="highlight">
+                The question isn't whether to use AI. It's whether you'll learn to use it well.
+            </p>
+
+            <p>I'm learning. One engine module at a time.</p>
+
+            <div class="author-box">
+                <div class="author-avatar">SF</div>
+                <div class="author-info">
+                    <h4>Sebastien Feser</h4>
+                    <p>Game Engineer | AI-Augmented Development</p>
+                    <p>Building AIEngine2D &mdash; a SNES-inspired 2D game engine with Claude AI</p>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <span></span>
+                <a href="01-engine-setup.html" class="nav-link">Next: Engine Setup Guide &rarr;</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>AIEngine2D - A SNES-inspired 2D Game Engine</p>
+            <p>Built with C++17 | SDL2 | OpenGL 3.3+ | ImGui</p>
+            <p>&copy; 2026 - MIT License</p>
+        </footer>
+    </div>
+</body>
+</html>
