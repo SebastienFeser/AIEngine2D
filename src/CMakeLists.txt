@@ -66,22 +66,24 @@ target_link_libraries(engine_editor
     PUBLIC imgui::imgui
 )
 
-# --- Main Engine Library (combines all) ---
-add_library(AIEngine2D STATIC
+# --- Main Executable (Test) ---
+add_executable(AIEngine2D WIN32
     main.cpp
 )
 
 target_link_libraries(AIEngine2D
-    PUBLIC engine_core
-    PUBLIC engine_renderer
-    PUBLIC engine_physics
-    PUBLIC engine_audio
-    PUBLIC engine_input
-    PUBLIC engine_assets
-    PUBLIC engine_animation
-    PUBLIC engine_editor
-    PUBLIC $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    PRIVATE engine_core
+    PRIVATE engine_renderer
+    PRIVATE engine_physics
+    PRIVATE engine_audio
+    PRIVATE engine_input
+    PRIVATE engine_assets
+    PRIVATE engine_animation
+    PRIVATE engine_editor
+    PRIVATE OpenGL::GL
+    PRIVATE $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
 )
 
 # Export include directories
-target_include_directories(AIEngine2D PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(AIEngine2D PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

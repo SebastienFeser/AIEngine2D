@@ -34,9 +34,6 @@ Makefile
 *.VC.opendb
 ipch/
 
-# Visual Studio Code
-.vscode/
-
 # CLion / JetBrains
 .idea/
 *.iml

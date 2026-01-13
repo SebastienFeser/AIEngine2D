@@ -44,14 +44,14 @@ Each phase includes:
 - [x] **CMakeLists.txt (examples/)**
   - Build example projects
 
-- [ ] **IDE configuration**
+- [x] **IDE configuration**
   - Generate VS Code `launch.json` for debugging
   - Generate `.clang-format` config
   - Generate `settings.json` for workspace
 
-- [ ] **First compilation test**
-  - main.cpp stub (empty main)
-  - Verify build succeeds
+- [x] **First compilation test**
+  - main.cpp with SDL2 window + OpenGL context
+  - Verify build succeeds (AIEngine2D.exe created)
 
 ### 🎨 Visual Milestones
 
