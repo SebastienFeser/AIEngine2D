@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Up a Modern C++ Game Engine - From Zero to Compilation | AIEngine2D</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-code: #0f0f1a;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0a0;
+            --accent: #e94560;
+            --accent-secondary: #0f3460;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --info: #60a5fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--accent-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin: 3rem 0 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--text-primary);
+        }
+
+        pre {
+            background: var(--bg-code);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--accent);
+        }
+
+        code {
+            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+            font-size: 0.9rem;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .callout {
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .callout-info {
+            background: rgba(96, 165, 250, 0.1);
+            border-left: 3px solid var(--info);
+        }
+
+        .callout-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 3px solid var(--warning);
+        }
+
+        .callout-success {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 3px solid var(--success);
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .step {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 1rem;
+        }
+
+        .step-title {
+            display: inline;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--accent-secondary);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .folder-tree {
+            font-family: 'Cascadia Code', monospace;
+            background: var(--bg-code);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .screenshot {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .screenshot-window {
+            display: inline-block;
+            background: #6495ED;
+            width: 300px;
+            height: 200px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .screenshot-titlebar {
+            background: var(--bg-primary);
+            height: 28px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            gap: 6px;
+        }
+
+        .screenshot-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .screenshot-caption {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--accent-secondary);
+            color: var(--text-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--accent-secondary);
+        }
+
+        .nav-link {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .toc {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .toc-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .toc-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc-list li {
+            margin: 0.5rem 0;
+        }
+
+        .toc-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="phase-badge">Phase 0</span>
+            <h1>Setting Up a Modern C++ Game Engine</h1>
+            <p class="meta">From Zero to Compilation | AIEngine2D Development Blog</p>
+            <p class="meta">Published: January 2026 | Reading time: ~15 minutes</p>
+        </header>
+
+        <article>
+            <p class="highlight">
+                This is the first blog post in a series documenting the development of AIEngine2D,
+                a lightweight SNES-inspired 2D game engine built with modern C++17. In this post,
+                we'll cover everything needed to set up the development environment on Windows.
+            </p>
+
+            <nav class="toc">
+                <div class="toc-title">Table of Contents</div>
+                <ol class="toc-list">
+                    <li><a href="#prerequisites">Prerequisites</a></li>
+                    <li><a href="#vcpkg">Installing vcpkg Package Manager</a></li>
+                    <li><a href="#dependencies">Installing Dependencies</a></li>
+                    <li><a href="#clone">Cloning the Repository</a></li>
+                    <li><a href="#build">Building the Project</a></li>
+                    <li><a href="#vscode">VS Code Configuration</a></li>
+                    <li><a href="#run">First Run</a></li>
+                    <li><a href="#next">Next Steps</a></li>
+                </ol>
+            </nav>
+
+            <h2 id="prerequisites">1. Prerequisites</h2>
+
+            <p>Before we begin, make sure you have the following software installed on your Windows machine:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Software</th>
+                        <th>Version</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Visual Studio 2022</td>
+                        <td>17.0+</td>
+                        <td>C++17 compiler (MSVC)</td>
+                    </tr>
+                    <tr>
+                        <td>CMake</td>
+                        <td>3.16+</td>
+                        <td>Build system generator</td>
+                    </tr>
+                    <tr>
+                        <td>Git</td>
+                        <td>2.x</td>
+                        <td>Version control</td>
+                    </tr>
+                    <tr>
+                        <td>VS Code (optional)</td>
+                        <td>Latest</td>
+                        <td>IDE with C++ extensions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="callout callout-info">
+                <div class="callout-title">Visual Studio Workloads</div>
+                <p>When installing Visual Studio, make sure to select the <strong>"Desktop development with C++"</strong> workload. This includes the MSVC compiler and Windows SDK.</p>
+            </div>
+
+            <h3>Verify CMake Installation</h3>
+            <p>Open a terminal and run:</p>
+            <pre><code>cmake --version</code></pre>
+            <p>Expected output: <span class="inline-code">cmake version 3.x.x</span></p>
+
+            <h2 id="vcpkg">2. Installing vcpkg Package Manager</h2>
+
+            <p>vcpkg is Microsoft's C++ package manager. It simplifies dependency management significantly.</p>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <h3 class="step-title">Clone vcpkg</h3>
+                <pre><code>cd C:\
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg</code></pre>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <h3 class="step-title">Bootstrap vcpkg</h3>
+                <pre><code>.\bootstrap-vcpkg.bat</code></pre>
+                <p>This compiles the vcpkg executable. It may take a few minutes.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <h3 class="step-title">Integrate with Visual Studio (optional)</h3>
+                <pre><code>.\vcpkg integrate install</code></pre>
+                <p>This allows Visual Studio projects to automatically find vcpkg packages.</p>
+            </div>
+
+            <div class="callout callout-warning">
+                <div class="callout-title">Important Path</div>
+                <p>This guide assumes vcpkg is installed at <span class="inline-code">C:\vcpkg</span>. If you install it elsewhere, update the paths in the build commands accordingly.</p>
+            </div>
+
+            <h2 id="dependencies">3. Installing Dependencies</h2>
+
+            <p>AIEngine2D uses three main dependencies:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Version</th>
+                        <th>Usage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SDL2</td>
+                        <td>2.32.10</td>
+                        <td>Window, input, audio backend</td>
+                    </tr>
+                    <tr>
+                        <td>ImGui</td>
+                        <td>1.91.9</td>
+                        <td>Editor UI (with docking + OpenGL3)</td>
+                    </tr>
+                    <tr>
+                        <td>OpenGL</td>
+                        <td>System</td>
+                        <td>Rendering (comes with Windows)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Install with vcpkg</h3>
+            <pre><code>cd C:\vcpkg
+
+# Install SDL2 (64-bit)
+.\vcpkg install sdl2:x64-windows
+
+# Install ImGui with SDL2 and OpenGL3 bindings
+.\vcpkg install imgui[sdl2-binding,opengl3-binding]:x64-windows</code></pre>
+
+            <div class="callout callout-info">
+                <div class="callout-title">Installation Time</div>
+                <p>The first installation may take 10-20 minutes as vcpkg downloads and compiles the packages. Subsequent builds are much faster thanks to caching.</p>
+            </div>
+
+            <h3>Verify Installation</h3>
+            <pre><code>.\vcpkg list</code></pre>
+            <p>You should see SDL2, ImGui, and their dependencies listed.</p>
+
+            <h2 id="clone">4. Cloning the Repository</h2>
+
+            <pre><code>cd C:\Users\YourName\Documents
+git clone https://github.com/SebastienFeser/AIEngine2D.git
+cd AIEngine2D</code></pre>
+
+            <h3>Project Structure</h3>
+            <div class="folder-tree">
+AIEngine2D/
+├── CMakeLists.txt          # Root CMake configuration
+├── CLAUDE.md               # AI agent instructions
+├── todo.md                 # Development roadmap
+├── .clang-format           # Code formatting rules
+├── .gitignore
+│
+├── src/
+│   ├── CMakeLists.txt      # Source build configuration
+│   ├── main.cpp            # Entry point
+│   ├── core/               # ECS, engine, events
+│   ├── renderer/           # OpenGL, shaders, batching
+│   ├── physics/            # Collision, rigidbodies
+│   ├── audio/              # WAV loader, mixer
+│   ├── input/              # SDL2 input handling
+│   ├── assets/             # Asset management
+│   ├── animation/          # Sprite animation
+│   ├── editor/             # ImGui level editor
+│   └── math/               # Vectors, matrices
+│
+├── assets/                 # Game assets (sprites, audio)
+├── docs/                   # Documentation
+├── examples/               # Example games
+└── tests/                  # Unit tests
+            </div>
+
+            <h2 id="build">5. Building the Project</h2>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <h3 class="step-title">Create Build Directory</h3>
+                <pre><code>mkdir build
+cd build</code></pre>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <h3 class="step-title">Configure CMake</h3>
+                <pre><code>cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake</code></pre>
+                <p>This generates Visual Studio project files and configures vcpkg integration.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <h3 class="step-title">Build Debug Configuration</h3>
+                <pre><code>cmake --build . --config Debug</code></pre>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <h3 class="step-title">Build Release Configuration</h3>
+                <pre><code>cmake --build . --config Release</code></pre>
+            </div>
+
+            <div class="callout callout-success">
+                <div class="callout-title">Build Output</div>
+                <p>After a successful build, you'll find the executable at:</p>
+                <p><span class="inline-code">build/bin/Debug/AIEngine2D.exe</span> (Debug)</p>
+                <p><span class="inline-code">build/bin/Release/AIEngine2D.exe</span> (Release)</p>
+            </div>
+
+            <h2 id="vscode">6. VS Code Configuration</h2>
+
+            <p>The repository includes pre-configured VS Code settings for an optimal development experience.</p>
+
+            <h3>Required Extensions</h3>
+            <ul>
+                <li><strong>C/C++</strong> (ms-vscode.cpptools) - IntelliSense and debugging</li>
+                <li><strong>CMake Tools</strong> (ms-vscode.cmake-tools) - CMake integration</li>
+                <li><strong>Shader languages support</strong> (slevesque.shader) - GLSL syntax highlighting</li>
+            </ul>
+
+            <h3>Included Configuration Files</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="inline-code">.vscode/settings.json</span></td>
+                        <td>Editor settings, CMake configuration, file associations</td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">.vscode/launch.json</span></td>
+                        <td>Debug configurations (Debug + Release)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">.vscode/tasks.json</span></td>
+                        <td>Build tasks (Configure, Build Debug, Build Release, Clean)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="inline-code">.vscode/c_cpp_properties.json</span></td>
+                        <td>IntelliSense configuration for C++17</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Key Settings</h3>
+            <pre><code>{
+    "C_Cpp.default.cppStandard": "c++17",
+    "cmake.configureOnOpen": true,
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.configureArgs": [
+        "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    ],
+    "editor.formatOnSave": true
+}</code></pre>
+
+            <h3>Build Tasks</h3>
+            <p>Use <span class="inline-code">Ctrl+Shift+B</span> to open the build menu:</p>
+            <ul>
+                <li><strong>Configure CMake</strong> - Generate build files</li>
+                <li><strong>Build Debug</strong> - Compile debug version (default)</li>
+                <li><strong>Build Release</strong> - Compile optimized version</li>
+                <li><strong>Clean</strong> - Remove build artifacts</li>
+                <li><strong>Rebuild Debug</strong> - Clean + Build</li>
+            </ul>
+
+            <h3>Debugging</h3>
+            <p>Press <span class="inline-code">F5</span> to start debugging. Two configurations are available:</p>
+            <ul>
+                <li><strong>Debug AIEngine2D</strong> - Run with debugger attached</li>
+                <li><strong>Release AIEngine2D</strong> - Run release build</li>
+            </ul>
+
+            <h2 id="run">7. First Run</h2>
+
+            <p>After building, run the executable:</p>
+            <pre><code>.\build\bin\Debug\AIEngine2D.exe</code></pre>
+
+            <div class="screenshot">
+                <div class="screenshot-window">
+                    <div class="screenshot-titlebar">
+                        <span class="screenshot-dot" style="background: #ff5f56;"></span>
+                        <span class="screenshot-dot" style="background: #ffbd2e;"></span>
+                        <span class="screenshot-dot" style="background: #27ca40;"></span>
+                    </div>
+                </div>
+                <p class="screenshot-caption">The engine window displays a cornflower blue background (classic DirectX test color)</p>
+            </div>
+
+            <h3>Expected Console Output</h3>
+            <pre><code>Engine initialized successfully!
+Window: 800x600
+OpenGL context created
+Press ESC to exit</code></pre>
+
+            <h3>Controls</h3>
+            <ul>
+                <li><strong>ESC</strong> - Exit the application</li>
+                <li><strong>Close button</strong> - Exit the application</li>
+            </ul>
+
+            <div class="callout callout-success">
+                <div class="callout-title">Phase 0 Complete!</div>
+                <p>If you see the blue window and console output, congratulations! The engine is set up correctly and ready for development.</p>
+            </div>
+
+            <h2 id="next">8. Next Steps</h2>
+
+            <p>With the development environment ready, we can move on to <strong>Phase 1: Core Engine Loop</strong>, where we'll implement:</p>
+            <ul>
+                <li>Fixed timestep game loop (120 FPS)</li>
+                <li>Frame delta time tracking</li>
+                <li>FPS counter and logging system</li>
+                <li>Engine singleton pattern</li>
+                <li>Event handling architecture</li>
+            </ul>
+
+            <h3>Code Style</h3>
+            <p>The project includes a <span class="inline-code">.clang-format</span> file based on Google style with modifications:</p>
+            <ul>
+                <li>4-space indentation</li>
+                <li>Allman brace style (braces on new lines)</li>
+                <li>100 character line limit</li>
+                <li>Automatic include sorting</li>
+            </ul>
+
+            <p>Enable "Format on Save" in VS Code to automatically format your code.</p>
+
+            <nav class="nav-links">
+                <span></span>
+                <a href="02-game-loop.html" class="nav-link">Next: Core Engine Loop &rarr;</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>AIEngine2D - A SNES-inspired 2D Game Engine</p>
+            <p>Built with C++17 | SDL2 | OpenGL 3.3+ | ImGui</p>
+            <p>&copy; 2026 - MIT License</p>
+        </footer>
+    </div>
+</body>
+</html>
