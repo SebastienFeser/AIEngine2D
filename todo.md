@@ -82,24 +82,24 @@ cd build && cmake .. && make
 
 ### Subtasks
 
-- [ ] **Engine main class**
-  - `class Engine` singleton
-  - `Engine::Get()` accessor
-  - `init()`, `update()`, `shutdown()` lifecycle
+- [x] **Engine main class**
+  - `class Engine` in main.cpp (basic version)
+  - `init()`, `run()`, `shutdown()` lifecycle
+  - Note: Singleton pattern (`Engine::Get()`) to be added later
 
-- [ ] **Window creation (SDL2)**
+- [x] **Window creation (SDL2)**
   - SDL_Init()
   - SDL_CreateWindow(800x600, centered)
-  - Window title: "SNES Engine"
-  - Window icon (optional)
+  - Window title: "AIEngine2D - Test"
+  - Window icon (TODO later)
 
-- [ ] **OpenGL context initialization**
+- [x] **OpenGL context initialization**
   - SDL_GL_CreateContext()
   - SDL_GL_SetSwapInterval(1) for Vsync
-  - Load OpenGL 3.3+ extensions (GLEW or custom loader)
-  - Set clear color (black = 0,0,0,1)
+  - OpenGL 3.3 Core Profile
+  - Clear color: cornflower blue (test color)
 
-- [ ] **Main loop structure**
+- [x] **Main loop structure**
   ```
   while (running) {
     handleEvents();
@@ -115,24 +115,24 @@ cd build && cmake .. && make
   - Step physics/logic at fixed rate
   - Render at refresh rate (uncapped or Vsync)
 
-- [ ] **Event handling**
+- [x] **Event handling**
   - SDL_PollEvent() loop
   - SDL_QUIT → set running = false
-  - SDL_KEYDOWN/SDL_KEYUP → pass to input system
+  - SDL_KEYDOWN (ESC) → quit
 
 - [ ] **Timing/Clock system**
   - `Clock` class (measure frame time)
   - FPS counter (log every 100 frames)
   - Frame delta time tracking
 
-- [ ] **Logger system**
+- [x] **Logger system**
   - `LOG_INFO()`, `LOG_WARNING()`, `LOG_ERROR()` macros
-  - Output to console + optional file
-  - Timestamp + severity level
+  - Output to console with colors (Windows + Unix support)
+  - Level prefix ([INFO], [WARNING], [ERROR])
 
-- [ ] **Test: Run 120 FPS loop**
+- [x] **Test: Basic window**
   - Window displays, no crashes
-  - Log FPS to console
+  - Console shows colored logs
   - Quit on ESC key
 
 ### 🎨 Visual Milestones
@@ -1803,8 +1803,8 @@ Browser: https://user.github.io/snes-engine/pong
 
 | Phase | Duration | Cumulative | Status |
 |-------|----------|-----------|--------|
-| 0 | 4-5d | ~1 week | Setup |
-| 1 | 5-7d | ~2.5 weeks | Core loop |
+| 0 | 4-5d | ~1 week | ✅ Done |
+| 1 | 5-7d | ~2.5 weeks | 🔄 In Progress (Logger done, Clock TODO) |
 | 2 | 3-4d | ~3.5 weeks | Math |
 | 3 | 6-8d | ~5 weeks | Renderer |
 | 4 | 5-6d | ~6.5 weeks | Sprites |
@@ -1848,8 +1848,12 @@ Before each phase is "complete":
 ## 🚀 NEXT IMMEDIATE STEPS
 
 1. ✅ Phase 0: Create folders + CMakeLists.txt
-2. ✅ Phase 1: Core loop (window, FPS lock)
-3. ✅ Phase 2: Math library
+2. 🔄 Phase 1: Core loop (window, logger done - need Clock/FPS)
+3. ⬚ Phase 2: Math library
 4. ... continue through Phase 20
+
+### Phase 1 Remaining:
+- [ ] Clock system (delta time, FPS counter)
+- [ ] Fixed timestep (120 FPS lock)
 
 **Ready to code!** 🎮

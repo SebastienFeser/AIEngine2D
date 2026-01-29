@@ -60,6 +60,7 @@ imgui.ini
 .DS_Store
 Thumbs.db
 Desktop.ini
+nul
 
 # Logs
 *.log

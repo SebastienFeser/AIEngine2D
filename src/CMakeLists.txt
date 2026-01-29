@@ -67,7 +67,8 @@ target_link_libraries(engine_editor
 )
 
 # --- Main Executable (Test) ---
-add_executable(AIEngine2D WIN32
+# Note: No WIN32 flag to keep console window for debug output
+add_executable(AIEngine2D
     main.cpp
 )
 

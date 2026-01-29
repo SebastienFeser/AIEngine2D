@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Game Loop: Fixed Timestep vs Variable Timestep | AIEngine2D</title>
+    <style>
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-code: #0f0f1a;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0a0;
+            --accent: #e94560;
+            --accent-secondary: #0f3460;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --info: #60a5fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--accent-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .wip-badge {
+            display: inline-block;
+            background: var(--warning);
+            color: #1a1a2e;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin: 3rem 0 1.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .highlight {
+            color: var(--text-primary);
+        }
+
+        pre {
+            background: var(--bg-code);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-left: 3px solid var(--accent);
+        }
+
+        code {
+            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+            font-size: 0.9rem;
+        }
+
+        .inline-code {
+            background: var(--bg-code);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        ul, ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .callout {
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .callout-info {
+            background: rgba(96, 165, 250, 0.1);
+            border-left: 3px solid var(--info);
+        }
+
+        .callout-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 3px solid var(--warning);
+        }
+
+        .callout-success {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 3px solid var(--success);
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--accent-secondary);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        .console-output {
+            background: #0a0a0a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Cascadia Code', monospace;
+            margin: 1.5rem 0;
+        }
+
+        .console-output .info {
+            color: #4ade80;
+        }
+
+        .console-output .warning {
+            color: #fbbf24;
+        }
+
+        .console-output .error {
+            color: #ef4444;
+        }
+
+        .toc {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .toc-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .toc-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc-list li {
+            margin: 0.5rem 0;
+        }
+
+        .toc-list a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .toc-list a:hover {
+            color: var(--accent);
+        }
+
+        .toc-list .todo {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--accent-secondary);
+        }
+
+        .nav-link {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--accent-secondary);
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="phase-badge">Phase 1</span>
+            <span class="wip-badge">Work in Progress</span>
+            <h1>Building a Game Loop</h1>
+            <p class="meta">Fixed Timestep vs Variable Timestep | AIEngine2D Development Blog</p>
+            <p class="meta">Published: January 2026 | Reading time: ~20 minutes</p>
+        </header>
+
+        <article>
+            <p class="highlight">
+                The game loop is the heartbeat of any game engine. In this post, we'll build a robust
+                game loop with logging, proper timing, and the foundations for a fixed timestep
+                simulation. We'll explore why fixed timestep matters and how to implement it correctly.
+            </p>
+
+            <nav class="toc">
+                <div class="toc-title">Table of Contents</div>
+                <ol class="toc-list">
+                    <li><a href="#overview">Game Loop Overview</a></li>
+                    <li><a href="#logger">Building a Logger System</a></li>
+                    <li><a href="#engine-class">The Engine Class</a></li>
+                    <li class="todo"><a href="#clock">Clock and Timing (Coming Soon)</a></li>
+                    <li class="todo"><a href="#fixed-timestep">Fixed Timestep (Coming Soon)</a></li>
+                    <li class="todo"><a href="#next">Next Steps</a></li>
+                </ol>
+            </nav>
+
+            <h2 id="overview">1. Game Loop Overview</h2>
+
+            <p>Every game runs a continuous loop that performs three essential tasks:</p>
+
+            <ol>
+                <li><strong>Process Input</strong> - Handle keyboard, mouse, and controller events</li>
+                <li><strong>Update Game State</strong> - Move entities, run physics, check collisions</li>
+                <li><strong>Render</strong> - Draw everything to the screen</li>
+            </ol>
+
+            <p>The simplest game loop looks like this:</p>
+
+            <pre><code>while (running) {
+    handleEvents();
+    update(deltaTime);
+    render();
+}</code></pre>
+
+            <p>But there's a critical question: <strong>how fast should this loop run?</strong></p>
+
+            <h3>Variable Timestep vs Fixed Timestep</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Approach</th>
+                        <th>Pros</th>
+                        <th>Cons</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Variable</strong></td>
+                        <td>Simple, adapts to hardware</td>
+                        <td>Physics instability, non-deterministic</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fixed</strong></td>
+                        <td>Deterministic, stable physics</td>
+                        <td>Slightly more complex</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>
+                For a game engine targeting consistent gameplay (especially with physics),
+                <strong>fixed timestep is the way to go</strong>. We'll implement a 120 FPS
+                physics simulation that runs independently from the render framerate.
+            </p>
+
+            <h2 id="logger">2. Building a Logger System</h2>
+
+            <p>
+                Before diving into the game loop, we need visibility into what's happening.
+                A good logger is essential for debugging and monitoring engine behavior.
+            </p>
+
+            <h3>Requirements</h3>
+
+            <ul>
+                <li>Three log levels: <span class="inline-code">INFO</span>, <span class="inline-code">WARNING</span>, <span class="inline-code">ERROR</span></li>
+                <li>Color-coded output for quick visual scanning</li>
+                <li>Cross-platform support (Windows + Unix terminals)</li>
+                <li>Simple macro-based API</li>
+            </ul>
+
+            <h3>Implementation: logger.h</h3>
+
+            <pre><code>#pragma once
+
+#include &lt;cstdio&gt;
+#include &lt;cstdarg&gt;
+
+#ifdef _WIN32
+#include &lt;windows.h&gt;
+#endif
+
+namespace SebF2DEngine
+{
+
+enum class LogLevel
+{
+    Info,
+    Warning,
+    Error
+};
+
+class Logger
+{
+public:
+    static void log(LogLevel level, const char* format, ...)
+    {
+        // Set console color based on level
+        setConsoleColor(level);
+
+        // Print level prefix
+        const char* prefix = getLevelPrefix(level);
+        printf("%s ", prefix);
+
+        // Print message
+        va_list args;
+        va_start(args, format);
+        vprintf(format, args);
+        va_end(args);
+
+        printf("\n");
+
+        // Reset color
+        resetConsoleColor();
+    }
+
+private:
+    static const char* getLevelPrefix(LogLevel level)
+    {
+        switch (level)
+        {
+            case LogLevel::Info:    return "[INFO]";
+            case LogLevel::Warning: return "[WARNING]";
+            case LogLevel::Error:   return "[ERROR]";
+            default:                return "[UNKNOWN]";
+        }
+    }
+
+    static void setConsoleColor(LogLevel level)
+    {
+#ifdef _WIN32
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        switch (level)
+        {
+            case LogLevel::Info:
+                SetConsoleTextAttribute(hConsole,
+                    FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                break;
+            case LogLevel::Warning:
+                SetConsoleTextAttribute(hConsole,
+                    FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                break;
+            case LogLevel::Error:
+                SetConsoleTextAttribute(hConsole,
+                    FOREGROUND_RED | FOREGROUND_INTENSITY);
+                break;
+        }
+#else
+        switch (level)
+        {
+            case LogLevel::Info:    printf("\033[32m"); break; // Green
+            case LogLevel::Warning: printf("\033[33m"); break; // Yellow
+            case LogLevel::Error:   printf("\033[31m"); break; // Red
+        }
+#endif
+    }
+
+    static void resetConsoleColor()
+    {
+#ifdef _WIN32
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hConsole,
+            FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+#else
+        printf("\033[0m");
+#endif
+    }
+};
+
+// Convenience macros
+#define LOG_INFO(...)    SebF2DEngine::Logger::log(SebF2DEngine::LogLevel::Info, __VA_ARGS__)
+#define LOG_WARNING(...) SebF2DEngine::Logger::log(SebF2DEngine::LogLevel::Warning, __VA_ARGS__)
+#define LOG_ERROR(...)   SebF2DEngine::Logger::log(SebF2DEngine::LogLevel::Error, __VA_ARGS__)
+
+} // namespace SebF2DEngine</code></pre>
+
+            <div class="callout callout-info">
+                <div class="callout-title">Why Macros?</div>
+                <p>
+                    The <span class="inline-code">LOG_INFO</span>, <span class="inline-code">LOG_WARNING</span>,
+                    and <span class="inline-code">LOG_ERROR</span> macros provide a clean API without
+                    requiring the full namespace path. They also allow for easy future enhancements
+                    like adding <span class="inline-code">__FILE__</span> and <span class="inline-code">__LINE__</span>
+                    information.
+                </p>
+            </div>
+
+            <h3>Console Output</h3>
+
+            <p>When the engine starts, the logger produces color-coded output:</p>
+
+            <div class="console-output">
+                <span class="info">[INFO]</span> Engine initialized successfully<br>
+                <span class="info">[INFO]</span> Window: 800x600<br>
+                <span class="info">[INFO]</span> OpenGL context created<br>
+                <span class="info">[INFO]</span> Press ESC to exit<br>
+                <span class="warning">[WARNING]</span> This is a warning test<br>
+                <span class="error">[ERROR]</span> This is an error test (not a real error)
+            </div>
+
+            <h2 id="engine-class">3. The Engine Class</h2>
+
+            <p>
+                The Engine class is the central coordinator. It owns the window, OpenGL context,
+                and orchestrates the main loop.
+            </p>
+
+            <h3>Current Implementation</h3>
+
+            <pre><code>class Engine
+{
+public:
+    bool init()
+    {
+        // Initialize SDL
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)
+        {
+            LOG_ERROR("SDL initialization failed: %s", SDL_GetError());
+            return false;
+        }
+
+        // Set OpenGL attributes
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+        // Create window
+        m_window = SDL_CreateWindow(
+            "AIEngine2D - Test",
+            SDL_WINDOWPOS_CENTERED,
+            SDL_WINDOWPOS_CENTERED,
+            800, 600,
+            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN
+        );
+
+        if (!m_window)
+        {
+            LOG_ERROR("Window creation failed: %s", SDL_GetError());
+            return false;
+        }
+
+        // Create OpenGL context
+        m_glContext = SDL_GL_CreateContext(m_window);
+        if (!m_glContext)
+        {
+            LOG_ERROR("OpenGL context creation failed: %s", SDL_GetError());
+            return false;
+        }
+
+        // Enable VSync
+        SDL_GL_SetSwapInterval(1);
+
+        LOG_INFO("Engine initialized successfully");
+        return true;
+    }
+
+    void run()
+    {
+        m_running = true;
+
+        while (m_running)
+        {
+            handleEvents();
+            update();
+            render();
+        }
+    }
+
+    void shutdown()
+    {
+        if (m_glContext) SDL_GL_DeleteContext(m_glContext);
+        if (m_window) SDL_DestroyWindow(m_window);
+        SDL_Quit();
+        LOG_INFO("Engine shutdown complete");
+    }
+
+private:
+    void handleEvents()
+    {
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_QUIT)
+                m_running = false;
+
+            if (event.type == SDL_KEYDOWN &&
+                event.key.keysym.sym == SDLK_ESCAPE)
+                m_running = false;
+        }
+    }
+
+    void update()
+    {
+        // Game logic will go here
+    }
+
+    void render()
+    {
+        // Clear screen (cornflower blue)
+        glClearColor(0.392f, 0.584f, 0.929f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        SDL_GL_SwapWindow(m_window);
+    }
+
+private:
+    SDL_Window* m_window = nullptr;
+    SDL_GLContext m_glContext = nullptr;
+    bool m_running = false;
+};</code></pre>
+
+            <div class="callout callout-warning">
+                <div class="callout-title">Work in Progress</div>
+                <p>
+                    This is a basic implementation. The next sections will add proper timing,
+                    delta time calculation, and fixed timestep logic.
+                </p>
+            </div>
+
+            <h2 id="clock">4. Clock and Timing</h2>
+
+            <p><em>Coming soon...</em></p>
+
+            <p>In this section, we'll implement:</p>
+            <ul>
+                <li>A <span class="inline-code">Clock</span> class for high-precision timing</li>
+                <li>Delta time calculation between frames</li>
+                <li>FPS counter with periodic logging</li>
+            </ul>
+
+            <h2 id="fixed-timestep">5. Fixed Timestep Implementation</h2>
+
+            <p><em>Coming soon...</em></p>
+
+            <p>We'll cover:</p>
+            <ul>
+                <li>The accumulator pattern</li>
+                <li>Separating update rate from render rate</li>
+                <li>Avoiding the "spiral of death"</li>
+                <li>Interpolation for smooth rendering</li>
+            </ul>
+
+            <h2 id="next">6. Next Steps</h2>
+
+            <p><em>Coming soon...</em></p>
+
+            <nav class="nav-links">
+                <a href="01-engine-setup.html" class="nav-link">&larr; Previous: Engine Setup</a>
+                <a href="03-math-library.html" class="nav-link">Next: Math Library &rarr;</a>
+            </nav>
+        </article>
+
+        <footer>
+            <p>AIEngine2D - A SNES-inspired 2D Game Engine</p>
+            <p>Built with C++17 | SDL2 | OpenGL 3.3+ | ImGui</p>
+            <p>&copy; 2026 - MIT License</p>
+        </footer>
+    </div>
+</body>
+</html>

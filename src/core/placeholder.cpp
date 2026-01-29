@@ -1,3 +1,3 @@
 // Placeholder for engine_core library
-// This file will be replaced with actual implementation
-namespace SebF2DEngine::Core {}
+// Will be replaced by actual core files (entity.cpp, engine.cpp, etc.)
+namespace SebF2DEngine { namespace core { static int placeholder = 0; } }

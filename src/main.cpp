@@ -1,10 +1,10 @@
 // =============================================================================
-// AIEngine2D - Main Entry Point (Test)
+// AIEngine2D - Main Entry Point
 // =============================================================================
 
+#include "core/logger.h"
 #include <SDL.h>
 #include <SDL_opengl.h>
-#include <stdio.h>
 
 namespace SebF2DEngine
 {
@@ -17,7 +17,7 @@ public:
         // Initialize SDL
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)
         {
-            printf("SDL initialization failed: %s\n", SDL_GetError());
+            LOG_ERROR("SDL initialization failed: %s", SDL_GetError());
             return false;
         }
 
@@ -39,7 +39,7 @@ public:
 
         if (!m_window)
         {
-            printf("Window creation failed: %s\n", SDL_GetError());
+            LOG_ERROR("Window creation failed: %s", SDL_GetError());
             return false;
         }
 
@@ -47,17 +47,21 @@ public:
         m_glContext = SDL_GL_CreateContext(m_window);
         if (!m_glContext)
         {
-            printf("OpenGL context creation failed: %s\n", SDL_GetError());
+            LOG_ERROR("OpenGL context creation failed: %s", SDL_GetError());
             return false;
         }
 
         // Enable VSync
         SDL_GL_SetSwapInterval(1);
 
-        printf("Engine initialized successfully!\n");
-        printf("Window: 800x600\n");
-        printf("OpenGL context created\n");
-        printf("Press ESC to exit\n");
+        LOG_INFO("Engine initialized successfully");
+        LOG_INFO("Window: 800x600");
+        LOG_INFO("OpenGL context created");
+        LOG_INFO("Press ESC to exit");
+
+        // Test all log levels
+        LOG_WARNING("This is a warning test");
+        LOG_ERROR("This is an error test (not a real error)");
 
         return true;
     }
@@ -89,7 +93,7 @@ public:
         }
 
         SDL_Quit();
-        printf("Engine shutdown complete\n");
+        LOG_INFO("Engine shutdown complete");
     }
 
 private:
